@@ -234,6 +234,9 @@ class SegmentLocalFSDirectory extends SegmentDirectory {
       case INVERTED_INDEX:
         buffer = columnIndexDirectory.getInvertedIndexBufferFor(column);
         break;
+      case RANGE_INDEX:
+        buffer = columnIndexDirectory.getRangeIndexBufferFor(column);
+        break;
       case BLOOM_FILTER:
         buffer = columnIndexDirectory.getBloomFilterBufferFor(column);
         break;
@@ -355,6 +358,8 @@ class SegmentLocalFSDirectory extends SegmentDirectory {
           return columnIndexDirectory.newForwardIndexBuffer(key.name, sizeBytes);
         case INVERTED_INDEX:
           return columnIndexDirectory.newInvertedIndexBuffer(key.name, sizeBytes);
+        case RANGE_INDEX:
+          return columnIndexDirectory.newRangeIndexBuffer(key.name, sizeBytes);
         case BLOOM_FILTER:
           return columnIndexDirectory.newBloomFilterBuffer(key.name, sizeBytes);
         case NULLVALUE_VECTOR:

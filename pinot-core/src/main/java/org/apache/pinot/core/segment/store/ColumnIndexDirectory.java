@@ -98,6 +98,15 @@ abstract class ColumnIndexDirectory implements Closeable {
       throws IOException;
 
   /**
+   * Get inverted index data buffer for a column
+   * @param column column name
+   * @return in-memory ByteBuffer like buffer for data
+   * @throws IOException
+   */
+  public abstract PinotDataBuffer getRangeIndexBufferFor(String column)
+      throws IOException;
+
+  /**
    * Get inverted bloom filter buffer for a column
    * @param column column name
    * @return in-memory ByteBuffer like buffer for data
@@ -143,6 +152,16 @@ abstract class ColumnIndexDirectory implements Closeable {
    * @throws IOException
    */
   public abstract PinotDataBuffer newInvertedIndexBuffer(String column, long sizeBytes)
+      throws IOException;
+
+  /**
+   * Allocate a new data buffer of specified sizeBytes in the columnar index directory
+   * @param column column name
+   * @param sizeBytes sizeBytes for the buffer allocation
+   * @return in-memory ByteBuffer like buffer for data
+   * @throws IOException
+   */
+  public abstract PinotDataBuffer newRangeIndexBuffer(String column, long sizeBytes)
       throws IOException;
 
   /**

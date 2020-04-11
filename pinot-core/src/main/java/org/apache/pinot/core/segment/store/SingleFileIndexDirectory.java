@@ -111,6 +111,12 @@ class SingleFileIndexDirectory extends ColumnIndexDirectory {
   }
 
   @Override
+  public PinotDataBuffer getRangeIndexBufferFor(String column)
+      throws IOException {
+    return checkAndGetIndexBuffer(column, ColumnIndexType.RANGE_INDEX);
+  }
+
+  @Override
   public PinotDataBuffer getBloomFilterBufferFor(String column)
       throws IOException {
     return checkAndGetIndexBuffer(column, ColumnIndexType.BLOOM_FILTER);
@@ -163,6 +169,12 @@ class SingleFileIndexDirectory extends ColumnIndexDirectory {
   public PinotDataBuffer newInvertedIndexBuffer(String column, long sizeBytes)
       throws IOException {
     return allocNewBufferInternal(column, ColumnIndexType.INVERTED_INDEX, sizeBytes, "inverted_index.create");
+  }
+
+  @Override
+  public PinotDataBuffer newRangeIndexBuffer(String column, long sizeBytes)
+      throws IOException {
+    return allocNewBufferInternal(column, ColumnIndexType.RANGE_INDEX, sizeBytes, "range_index.create");
   }
 
   @Override

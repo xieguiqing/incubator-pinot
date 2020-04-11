@@ -85,6 +85,20 @@ class FilePerIndexDirectory extends ColumnIndexDirectory {
   }
 
   @Override
+  public PinotDataBuffer getRangeIndexBufferFor(String column)
+      throws IOException {
+    IndexKey key = new IndexKey(column, ColumnIndexType.RANGE_INDEX);
+    return getReadBufferFor(key);
+  }
+
+  @Override
+  public PinotDataBuffer newRangeIndexBuffer(String column, long sizeBytes)
+      throws IOException {
+    IndexKey key = new IndexKey(column, ColumnIndexType.RANGE_INDEX);
+    return getWriteBufferFor(key, sizeBytes);
+  }
+
+  @Override
   public PinotDataBuffer getBloomFilterBufferFor(String column)
       throws IOException {
     IndexKey key = new IndexKey(column, ColumnIndexType.BLOOM_FILTER);
@@ -173,6 +187,9 @@ class FilePerIndexDirectory extends ColumnIndexDirectory {
         break;
       case INVERTED_INDEX:
         filename = metadata.getBitmapInvertedIndexFileName(column);
+        break;
+      case RANGE_INDEX:
+        filename = metadata.getBitmapRangeIndexFileName(column);
         break;
       case BLOOM_FILTER:
         filename = metadata.getBloomFilterFileName(column);

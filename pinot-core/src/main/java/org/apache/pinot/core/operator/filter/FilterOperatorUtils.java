@@ -54,6 +54,10 @@ public class FilterOperatorUtils {
 
     Predicate.Type predicateType = predicateEvaluator.getPredicateType();
 
+    if (predicateType == Predicate.Type.RANGE && dataSource.getRangeIndex() != null) {
+      return new RangeFilterOperator(predicateEvaluator, dataSource, startDocId, endDocId);
+    }
+
     if (predicateType == Predicate.Type.TEXT_MATCH) {
       return new TextMatchFilterOperator(predicateEvaluator, dataSource, startDocId, endDocId);
     }
