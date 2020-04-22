@@ -20,6 +20,7 @@ package org.apache.pinot.plugin.filesystem;
 
 import com.adobe.testing.s3mock.testng.S3Mock;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -28,7 +29,8 @@ import java.util.Arrays;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
 import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.AfterClass;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 import software.amazon.awssdk.core.sync.RequestBody;
@@ -50,13 +52,20 @@ public class S3PinotFSTest {
   final String FILE_FORMAT = "%s://%s/%s";
   final String DIR_FORMAT = "%s://%s";
 
-  @BeforeMethod
+  @BeforeClass
   public void setUp() {
     S3Mock s3Mock = S3Mock.getInstance();
     _s3Client = s3Mock.createS3ClientV2();
     _s3PinotFS = new S3PinotFS();
     _s3PinotFS.init(_s3Client);
     _s3Client.createBucket(CreateBucketRequest.builder().bucket(BUCKET).build());
+  }
+
+  @AfterClass
+  public void tearDown()
+      throws IOException {
+    _s3PinotFS.close();
+    _s3Client.close();
   }
 
   private void createEmptyFile(String folderName, String fileName) {
